@@ -18,6 +18,12 @@ parse_git_branch() {
   (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
 }
 
+parse_git_branch_info() {
+  GIT_REV_PARSE=`git rev-parse --short HEAD`
+  GIT_SYMBOLIC_REF=`git symbolic-ref -q HEAD`
+  echo "${GIT_SYMBOLIC_REF#(refs/heads/|tags/)} $GIT_REV_PARSE" 2> /dev/null
+}
+
 # Show different symbols as appropriate for various Git repository states
 parse_git_state() {
   # Compose this value via multiple conditional appends.
@@ -57,7 +63,8 @@ parse_git_state() {
 
 git_prompt_string() {
   local git_where="$(parse_git_branch)"
-  [ -n "$git_where" ] && echo "$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+  local git_branch_info="$(parse_git_branch_info)"
+  [ -n "$git_where" ] && echo "$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_branch_info}$GIT_PROMPT_SUFFIX"
 }
 
 PROMPT='%F{green}%2c%F{blue} %#%f '
