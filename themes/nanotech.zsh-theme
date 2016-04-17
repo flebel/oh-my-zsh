@@ -19,9 +19,11 @@ parse_git_branch() {
 }
 
 parse_git_branch_info() {
-  GIT_REV_PARSE=`git rev-parse --short HEAD`
-  GIT_SYMBOLIC_REF=`git symbolic-ref -q HEAD`
-  echo "${GIT_SYMBOLIC_REF#(refs/heads/|tags/)} $GIT_REV_PARSE" 2> /dev/null
+  if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = true ]; then
+    GIT_REV_PARSE=`git rev-parse --short HEAD`
+    GIT_SYMBOLIC_REF=`git symbolic-ref -q HEAD`
+    echo "${GIT_SYMBOLIC_REF#(refs/heads/|tags/)} $GIT_REV_PARSE" 2> /dev/null
+  fi
 }
 
 # Show different symbols as appropriate for various Git repository states
