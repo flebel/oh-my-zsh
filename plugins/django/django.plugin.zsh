@@ -125,7 +125,7 @@ _managepy-runserver(){
     $nul_args && ret=0
 }
 
-_managepy-runserver_plus(){
+_managepy-runserver_plus(){}
 
 _managepy-shell(){
   _arguments -s : \
@@ -241,3 +241,4 @@ compdef _managepy manage.py
 compdef _managepy django
 compdef _managepy django-admin.py
 compdef _managepy django-manage
+
